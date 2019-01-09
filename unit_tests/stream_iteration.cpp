@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 #include <atomic>
-#include <experimental/optional>
+#include <optional>
 
 #include <gtest/gtest.h>
 
@@ -26,8 +26,6 @@
 
 using namespace std;
 using namespace grppi;
-template <typename T>
-using optional = std::experimental::optional<T>;
 
 template <typename T>
 class stream_iteration_test : public ::testing::Test {

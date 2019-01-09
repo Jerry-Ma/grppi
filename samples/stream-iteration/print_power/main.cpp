@@ -21,7 +21,7 @@
 #include <string>
 #include <numeric>
 #include <stdexcept>
-#include <experimental/optional>
+#include <optional>
 
 // grppi
 #include "grppi.h"
@@ -31,7 +31,6 @@
 
 void print_power(grppi::dynamic_execution & e, int n) {
   using namespace std;
-  using namespace experimental;
 
   auto generator = [i=1,max=n+1]() mutable -> optional<int> {
     if (i<max) return i++;

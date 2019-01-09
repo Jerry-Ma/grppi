@@ -15,7 +15,7 @@
  */
 #include <atomic>
 #include <utility>
-#include <experimental/optional>
+#include <optional>
 
 #include <gtest/gtest.h>
 
@@ -27,8 +27,6 @@
 
 using namespace std;
 using namespace grppi;
-template <typename T>
-using optional = std::experimental::optional<T>;
 
 template <typename T>
 class farm_pipeline_test : public ::testing::Test {

@@ -39,7 +39,7 @@ if(GRPPI_UNIT_TEST_ENABLE)
 
   if ( NOT (${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang") )
     # Add coverage options. Needs to be done before add_executable
-    add_compile_options(--coverage)
+    add_compile_options(--coverage -fprofile-arcs -ftest-coverage)
   endif()
 
   set(PROJECT_TEST_NAME utest_${PROJECT_NAME_STR})
@@ -55,12 +55,12 @@ if(GRPPI_UNIT_TEST_ENABLE)
       ${CMAKE_CURRENT_SOURCE_DIR}/*_legacy.cpp)
   set_source_files_properties(${TEST_SRC_FILES_LEGACY} 
       PROPERTIES COMPILE_FLAGS "-Wno-deprecated-declarations")
-
+  set(CMAKE_EXE_LINKER_FLAGS "-L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib")
   target_link_libraries(${PROJECT_TEST_NAME} 
       ${GTEST_BOTH_LIBRARIES}
-      gcov
       ${TBB_LIBRARIES}
       ${CMAKE_THREAD_LIBS_INIT}
+      c++experimental
   )
   
   GTEST_ADD_TESTS(${PROJECT_TEST_NAME} "" ${TEST_SRC_FILES})

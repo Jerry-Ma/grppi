@@ -26,7 +26,7 @@
 
 #include <type_traits>
 #include <tuple>
-#include <experimental/optional>
+#include <optional>
 
 #include <omp.h>
 
@@ -1019,7 +1019,6 @@ void parallel_execution_omp::do_pipeline(Inqueue & input_queue, Transformer && t
       mpmc_queue<output_type> & output_queue) const
 {
   using namespace std;
-  using namespace experimental;
 
   using output_item_value_type = typename output_type::first_type::value_type;
   for (;;) {
@@ -1040,13 +1039,12 @@ void parallel_execution_omp::do_pipeline(Queue & input_queue,
     OtherTransformers &&... other_ops) const
 {
   using namespace std;
-  using namespace experimental;
 
   using input_item_type = typename Queue::value_type;
   using input_item_value_type = typename input_item_type::first_type::value_type;
 
   using output_type = typename stage_return_type<input_item_value_type, Transformer>::type;
-  using output_optional_type = experimental::optional<output_type>;
+  using output_optional_type = std::optional<output_type>;
   using output_item_type = pair <output_optional_type, long> ;
 
   decltype(auto) output_queue =
@@ -1074,7 +1072,7 @@ void parallel_execution_omp::do_pipeline(
   using input_type = typename Queue::value_type;
   using input_value_type = typename input_type::first_type::value_type;
   using result_type = typename result_of<Transformer(input_value_type)>::type;
-  using output_value_type = experimental::optional<result_type>;
+  using output_value_type = std::optional<result_type>;
   using output_type = pair<output_value_type,long>;
 
   decltype(auto) output_queue =
@@ -1103,7 +1101,6 @@ void parallel_execution_omp::do_pipeline(
     Farm<FarmTransformer> && farm_obj) const
 {
   using namespace std;
-  using namespace experimental;
  
   for (int i=0; i<farm_obj.cardinality(); ++i) {
     #pragma omp task shared(farm_obj,input_queue)
@@ -1129,7 +1126,6 @@ void parallel_execution_omp::do_pipeline(
     OtherTransformers && ... other_transform_ops) const
 {
   using namespace std;
-  using namespace experimental;
   using input_type = typename Queue::value_type;
   using input_value_type = typename input_type::first_type::value_type;
 
@@ -1300,7 +1296,6 @@ void parallel_execution_omp::do_pipeline(
     OtherTransformers && ... other_transform_ops) const
 {
   using namespace std;
-  using namespace experimental;
 
   using output_item_value_type = optional<decay_t<Identity>>;
   using output_item_type = pair<output_item_value_type,long>;
@@ -1343,7 +1338,6 @@ void parallel_execution_omp::do_pipeline(
     OtherTransformers && ... other_transform_ops) const
 {
   using namespace std;
-  using namespace experimental;
 
   using input_item_type = typename decay_t<Queue>::value_type;
   decltype(auto) output_queue =
