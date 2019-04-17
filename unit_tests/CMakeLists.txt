@@ -60,7 +60,6 @@ if(GRPPI_UNIT_TEST_ENABLE)
       ${GTEST_BOTH_LIBRARIES}
       ${TBB_LIBRARIES}
       ${CMAKE_THREAD_LIBS_INIT}
-      c++experimental
   )
 
   GTEST_ADD_TESTS(${PROJECT_TEST_NAME} "" ${TEST_SRC_FILES})
@@ -69,6 +68,7 @@ if(GRPPI_UNIT_TEST_ENABLE)
   if ( NOT (${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang") )
     target_link_libraries(${PROJECT_TEST_NAME}
         gcov
+        c++experimental
     )
     find_program(LCOV_CMD lcov)
     find_program(GENHTML_CMD genhtml)
