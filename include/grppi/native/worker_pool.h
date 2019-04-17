@@ -85,7 +85,7 @@ class worker_pool {
     }
 
   private:
-    const int num_threads_;
+    int num_threads_;
     std::vector<std::thread> workers_;
 };
 
