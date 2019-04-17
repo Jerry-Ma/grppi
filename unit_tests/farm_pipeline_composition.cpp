@@ -15,18 +15,27 @@
  */
 #include <atomic>
 #include <utility>
+#if __cplusplus < 201703L
+#include <experimental/optional>
+#else
 #include <optional>
+#endif
 
 #include <gtest/gtest.h>
 
-#include "farm.h"
-#include "pipeline.h"
-#include "dyn/dynamic_execution.h"
+#include "grppi/farm.h"
+#include "grppi/pipeline.h"
+#include "grppi/dyn/dynamic_execution.h"
 
 #include "supported_executions.h"
 
 using namespace std;
 using namespace grppi;
+
+#if __cplusplus < 201703L
+template <typename T>
+using optional = std::experimental::optional<T>;
+#endif
 
 template <typename T>
 class farm_pipeline_test : public ::testing::Test {

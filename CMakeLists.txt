@@ -5,7 +5,7 @@ project(${PROJECT_NAME_STR})
 # Path for additional CMake modules
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake.modules)
 
-# Print processor and compiler 
+# Print processor and compiler
 message(STATUS "Detected processor is " ${CMAKE_SYSTEM_PROCESSOR} )
 message(STATUS "CMAKE_C_COMPILER: " ${CMAKE_C_COMPILER} )
 message(STATUS "CMAKE_CXX_COMPILER: " ${CMAKE_CXX_COMPILER} )
@@ -18,14 +18,14 @@ add_compile_options(-Wall -Werror -pedantic -pedantic-errors -Wextra -Wno-gnu-ze
 # Set specific options depending on compiler
 if ( ${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang" )
   if(NOT(${CMAKE_CXX_COMPILER_VERSION} VERSION_GREATER 3.9.0))
-    message(FATAL_ERROR "Clang version " ${CMAKE_CXX_COMPILER_VERSION} 
+    message(FATAL_ERROR "Clang version " ${CMAKE_CXX_COMPILER_VERSION}
        " not supported. Upgrade to 3.9 or above.")
   else()
     message( STATUS "C++ Compiler is Clang" )
   endif()
 elseif(${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
   if(NOT(${CMAKE_CXX_COMPILER_VERSION} VERSION_GREATER 6.0))
-    message(FATAL_ERROR "g++ version " ${CMAKE_CXX_COMPILER_VERSION} 
+    message(FATAL_ERROR "g++ version " ${CMAKE_CXX_COMPILER_VERSION}
         " not supported. Upgrade to 6.0 or above.")
   else()
     message( STATUS "C++ Compiler is GNU")
@@ -35,25 +35,25 @@ elseif(${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
     endif()
   endif()
 elseif ( ${CMAKE_CXX_COMPILER_ID} STREQUAL "Intel" )
-  message(FATAL_ERROR "Intel compiler is not currently supported")   
+  message(FATAL_ERROR "Intel compiler is not currently supported")
 # if(NOT(${CMAKE_CXX_COMPILER_VERSION} VERSION_GREATER 16.0))
-#   message( FATAL_ERROR "Intel version " ${CMAKE_CXX_COMPILER_VERSION} 
+#   message( FATAL_ERROR "Intel version " ${CMAKE_CXX_COMPILER_VERSION}
 #       " not supported. Upgrade to 16.0 or above.")
 # else()
 #   message( STATUS "C++ Compiler is Intel" )
 #   message( WARNING "WARNING: GrPPI has not been fully tested with Intel compiler." )
 # endif()
 else()
-  message( FATAL_ERROR "Unsupported compiler: " 
-      ${CMAKE_CXX_COMPILER_ID} 
+  message( FATAL_ERROR "Unsupported compiler: "
+      ${CMAKE_CXX_COMPILER_ID}
       ${CMAKE_CXX_COMPILER_VERSION})
 endif()
 
 # GrPPI library
-include_directories("${CMAKE_SOURCE_DIR}/include")
+include_directories(BEFORE SYSTEM "${CMAKE_SOURCE_DIR}/include")
 
 # TBB Library
-find_package( TBB ) 
+find_package( TBB )
 if( TBB_FOUND )
   option(GRPPI_TBB_ENABLE "Require TBB library" ON)
   message(STATUS "TBB found")
@@ -74,7 +74,7 @@ find_package(Threads REQUIRED)
 
 # OMP library
 find_package(OpenMP)
-if (OPENMP_FOUND) 
+if (OPENMP_FOUND)
   option( GRPPI_OMP_ENABLE "Require OpenMP library" ON )
   message(STATUS "OpenMP found")
 else(OPENMP_FOUND)
@@ -122,7 +122,8 @@ if( GRPPI_DOXY_ENABLE )
 endif( GRPPI_DOXY_ENABLE )
 
 # Installation
-install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/ DESTINATION "include/${CMAKE_PROJECT_NAME}"
+install(DIRECTORY "${PROJECT_SOURCE_DIR}/include/${CMAKE_PROJECT_NAME}"
+        DESTINATION "include"
         FILES_MATCHING PATTERN "*.h")
 
 # Example applications

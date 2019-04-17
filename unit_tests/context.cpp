@@ -14,20 +14,27 @@
  * limitations under the License.
  */
 #include <atomic>
+#if __cplusplus < 201703L
+#include <experimental/optional>
+#else
 #include <optional>
+#endif
 #include <numeric>
 
 #include <gtest/gtest.h>
 
-#include "grppi.h"
-#include "dyn/dynamic_execution.h"
+#include "grppi/grppi.h"
+#include "grppi/dyn/dynamic_execution.h"
 
 #include "supported_executions.h"
 
 using namespace std;
 using namespace grppi;
+
+#if __cplusplus < 201703L
 template <typename T>
-using optional = std::optional<T>;
+using optional = std::experimental::optional<T>;
+#endif
 
 template <typename T>
 class context_test : public ::testing::Test {

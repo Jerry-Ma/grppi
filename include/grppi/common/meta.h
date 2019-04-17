@@ -16,7 +16,20 @@
 #ifndef GRPPI_COMMON_META_H
 #define GRPPI_COMMON_META_H
 
-#include <experimental/type_traits>
+#if __has_include(<experimental/type_traits>)
+#  include <experimental/type_traits>
+#  ifdef _LIBCPP_VERSION
+#    if _LIBCPP_VERSION < 5000
+#      error "C++ detection idiom not supported. Upgrade your C++ standard library"
+#    endif
+#  else
+#    if __cpp_lib_experimental_detect < 201505
+#      error "C++ detection idiom not supported. Upgrade your C++ compiler/standard library"
+#    endif
+#  endif
+#else
+#  error "Experimental type traits not found. Upgrade your C++ compiler."
+#endif
 
 namespace grppi {
 

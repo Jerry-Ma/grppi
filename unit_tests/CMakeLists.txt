@@ -1,11 +1,11 @@
 # Copyright 2018 Universidad Carlos III de Madrid
-# 
+#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -46,28 +46,30 @@ if(GRPPI_UNIT_TEST_ENABLE)
   file(GLOB TEST_SRC_FILES
       ${CMAKE_CURRENT_SOURCE_DIR}/*cpp)
   add_executable(${PROJECT_TEST_NAME} ${TEST_SRC_FILES})
-  
+
   # Unit testing should be made in debug mode
   set(CMAKE_BUILD_TYPE "Debug")
 
   # Do not emit deprecated warnings for _legacy unit tests
   file(GLOB TEST_SRC_FILES_LEGACY
       ${CMAKE_CURRENT_SOURCE_DIR}/*_legacy.cpp)
-  set_source_files_properties(${TEST_SRC_FILES_LEGACY} 
+  set_source_files_properties(${TEST_SRC_FILES_LEGACY}
       PROPERTIES COMPILE_FLAGS "-Wno-deprecated-declarations")
-  set(CMAKE_EXE_LINKER_FLAGS "-L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib")
-  target_link_libraries(${PROJECT_TEST_NAME} 
+
+  target_link_libraries(${PROJECT_TEST_NAME}
       ${GTEST_BOTH_LIBRARIES}
       ${TBB_LIBRARIES}
       ${CMAKE_THREAD_LIBS_INIT}
       c++experimental
   )
-  
+
   GTEST_ADD_TESTS(${PROJECT_TEST_NAME} "" ${TEST_SRC_FILES})
 
   # Coverage options
   if ( NOT (${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang") )
-
+    target_link_libraries(${PROJECT_TEST_NAME}
+        gcov
+    )
     find_program(LCOV_CMD lcov)
     find_program(GENHTML_CMD genhtml)
 
@@ -75,9 +77,9 @@ if(GRPPI_UNIT_TEST_ENABLE)
         ${LCOV_CMD} --directory . --zerocounters
         COMMAND ${PROJECT_TEST_NAME}
         COMMAND ${LCOV_CMD} --directory . --capture --output-file mycov.info
-        COMMAND ${LCOV_CMD} --remove mycov.info '/usr/*' 'unit_tests/*' 
+        COMMAND ${LCOV_CMD} --remove mycov.info '/usr/*' 'unit_tests/*'
               --output-file mycov.info.cleaned
-        COMMAND ${GENHTML_CMD} -o mycov mycov.info.cleaned --legend -s 
+        COMMAND ${GENHTML_CMD} -o mycov mycov.info.cleaned --legend -s
         COMMAND ${CMAKE_COMMAND} -E remove mycov.info mycov.info.cleaned
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
         COMMENT "Computing coverage and generating report"
