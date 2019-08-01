@@ -70,7 +70,7 @@ private:
 \param rs References to ranges values.
 */
 template <typename ... Rs,
-          meta::requires<range_concept, Rs...> = 0>
+          meta::requires_<range_concept, Rs...> = 0>
 auto zip(Rs & ... rs) { 
   return zip_view<Rs...>(rs...); 
 }
